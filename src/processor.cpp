@@ -3,7 +3,16 @@
 
 // Return the aggregate CPU utilization
 float Processor::Utilization() {
-  long total = LinuxParser::Jiffies();
-  long active = LinuxParser::ActiveJiffies();
-  return active * (1.f / total);
+    float active_time = static_cast<float>(LinuxParser::ActiveJiffies());
+    float idle_time = static_cast<float>(LinuxParser::IdleJiffies());
+
+    float cur_total_cpu_time = active_time + idle_time;
+    
+    float delta_total_cpu_time = cur_total_cpu_time - prev_total_cpu_time;
+    float delta_total_idle_time = idle_time - prev_total_idle_time;
+    
+    prev_total_cpu_time = active_time + idle_time;
+    prev_total_idle_time = idle_time;
+    
+    return (delta_total_cpu_time - delta_total_idle_time) / delta_total_cpu_time;
 }

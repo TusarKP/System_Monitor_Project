@@ -7,27 +7,28 @@
 #include "process.h"
 #include "processor.h"
 #include "system.h"
-
 #include "linux_parser.h"
 
 using std::set;
 using std::size_t;
 using std::string;
 using std::vector;
+/*You need to complete the mentioned TODOs in order to satisfy the rubric criteria "The student will be able to extract and display basic data about the system."
+
+You need to properly format the uptime. Refer to the comments mentioned in format. cpp for formatting the uptime.*/
 
 // Return the system's CPU
 Processor& System::Cpu() { return cpu_; }
 
 // Return a container composed of the system's processes
 vector<Process>& System::Processes() {
-  vector<int> pids = LinuxParser::Pids();
-  processes_.clear();
-  for (int pid : pids) {
-    Process process(pid);
-    processes_.push_back(process);
-  }
-  std::sort(processes_.rbegin(),processes_.rend());
-  return processes_;
+    processes_.clear();
+    std::vector<int> pids = LinuxParser::Pids();
+    for (auto i : pids) {
+        Process iprocess(i);
+        processes_.emplace_back(iprocess);
+    }
+    return processes_;
 }
 
 // Return the system's kernel identifier (string)
