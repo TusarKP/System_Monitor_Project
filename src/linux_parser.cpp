@@ -72,7 +72,7 @@ vector<int> LinuxParser::Pids() {
 // Read and return the system memory utilization
 float LinuxParser::MemoryUtilization() {
   string line, key, value;
-  float MemTotal, MemFree;
+  float MemTotal{0.0}, MemFree{0.0};
   std::ifstream filestream(kProcDirectory + kMeminfoFilename);
   if (filestream.is_open()) {
     while (std::getline(filestream, line)) {
@@ -178,7 +178,7 @@ vector<string> LinuxParser::CpuUtilization() {
 // Read and return the total number of processes
 int LinuxParser::TotalProcesses() {
   string line, key, value;
-  int total_processes;
+  int total_processes{0};
   std::ifstream filestream(kProcDirectory + kStatFilename);
   if (filestream.is_open()) {
     std::getline(filestream, line);
@@ -195,7 +195,7 @@ int LinuxParser::TotalProcesses() {
 // Read and return the number of running processes
 int LinuxParser::RunningProcesses() {
   string line, key, value;
-  int runningprocesses;
+  int runningprocesses{0};
   std::ifstream filestream(kProcDirectory + kStatFilename);
   if (filestream.is_open()) {
     std::getline(filestream, line);
@@ -226,7 +226,7 @@ string LinuxParser::Ram(int pid) {
   if (filestream.is_open()) {
     while (std::getline(filestream, line)) {
       std::istringstream linestream(line);
-      while (linestream >> key) {
+      while (linestream >> key >> value) {
         if (key == "VmSize:") {
           memory_used_by_process = to_string(stol(value) / 1024);
         }
